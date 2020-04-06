@@ -1,0 +1,2 @@
+SelectedColor - Gets or sets the currently selected color.
+SelectedColorText - Gets the known color name, or the color hexadecimal string of the SelectedColor.
