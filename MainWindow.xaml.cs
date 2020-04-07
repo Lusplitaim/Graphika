@@ -45,7 +45,7 @@ namespace Graphika
 
         private void CreateShape(object sender, RoutedEventArgs e)
         {
-            try
+            /*try
             {
                 string chosenFigureMode = (string)FigureComboList.SelectedItem;
                 chosenFigureMode = "Graphika.Shapes." + chosenFigureMode + "Figure";
@@ -82,7 +82,7 @@ namespace Graphika
             catch (Exception ex)
             {
                 System.Windows.MessageBox.Show(ex.Message);
-            }
+            }*/
         }
 
         private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
