@@ -24,6 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -79,6 +80,7 @@
     <Compile Include="Shapes\Figure.cs" />
     <Compile Include="Shapes\FigureList.cs" />
     <Compile Include="Shapes\LineFig.cs" />
+    <Compile Include="Shapes\PolygonFig.cs" />
     <Compile Include="Shapes\RectangleFig.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

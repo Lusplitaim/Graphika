@@ -1,20 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Shapes;
-using System.Windows.Media;
 using System.Windows.Controls;
 
 namespace Graphika.Shapes
 {
     class LineFigure: Figure
     {
-        public override Shape DrawShape(int X1, int Y1, int X2, int Y2)
+        public override Shape DrawShape(int X1, int Y1, int X2, int Y2, int Addit)
         {
             Line line = new Line();
-            line.StrokeThickness = 3;
+            line.StrokeThickness = Addit;
 
             // Четвертая четверть.
             if ((X2 >= X1) && (Y2 >= Y1))

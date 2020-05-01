@@ -1,20 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Reflection;
 using System.Windows.Shapes;
 using Graphika.Shapes;
 using Graphika.Data;
+
 
 namespace Graphika
 {
@@ -23,11 +15,17 @@ namespace Graphika
     /// </summary>
     public partial class MainWindow : Window
     {
-        // Список объектов, сохраняемых в файл
+        // Список объектов, сохраняемых в файл.
         private FigureList figureList;
 
-        // Список объектов, доступных для рисования
-        private List<string> figureModeList = new List<string>() { "Ellipse", "Rectangle", "Line"};
+        // Список объектов, доступных для рисования.
+        private readonly List<Figure> shapesList = new List<Figure>
+        {
+            new EllipseFigure(),
+            new RectangleFigure(),
+            new LineFigure(),
+            new PolygonFigure()
+        };
 
         // Вспомогательный объект сериализации/десериализации.
         private DataIO dataIO;
@@ -39,50 +37,44 @@ namespace Graphika
         {
             InitializeComponent();
             ClrPcker_Background.SelectedColor = Colors.Black;
-            FigureComboList.ItemsSource = figureModeList;
+            ClrPcker_Stroke.SelectedColor = Colors.Black;        
+            FigureComboList.ItemsSource = shapesList;
             FigureComboList.SelectedIndex = 0;
         }
 
         private void CreateShape(object sender, RoutedEventArgs e)
         {
-            /*try
+            try
             {
-                string chosenFigureMode = (string)FigureComboList.SelectedItem;
-                chosenFigureMode = "Graphika.Shapes." + chosenFigureMode + "Figure";
-                Type type = Type.GetType(chosenFigureMode);
-
-                Object newFigure = Activator.CreateInstance(type);
+                var chosenFigureMode = (Figure)FigureComboList.SelectedItem;
 
                 int X1 = Convert.ToInt32(X1Edit.Text);
                 int X2 = Convert.ToInt32(X2Edit.Text);
                 int Y1 = Convert.ToInt32(Y1Edit.Text);
                 int Y2 = Convert.ToInt32(Y2Edit.Text);
-          
-                // Объект, вносимый в список
-                Object newFigureShape = new Object();
-                MethodInfo method = type.GetMethod("DrawShape");
-                // Создание выбранного объекта
-                newFigureShape = method.Invoke(newFigure, new Object[] { X1, Y1, X2, Y2 });
+                int Addit = Convert.ToInt32(StrokeEdit.Text);
 
+                // Создание выбранного объекта.
+                var newFigureShape = chosenFigureMode.DrawShape(X1, Y1, X2, Y2, Addit);
+
+                // Работа со свойствами созданной фигуры.
                 Color color = (Color)ColorConverter.ConvertFromString(ClrPcker_Background.SelectedColorText);
                 SolidColorBrush brush = new SolidColorBrush(color);
 
-                // Работа со свойствами созданной фигуры.
-                type = Type.GetType("System.Windows.Shapes.Shape, PresentationFramework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"); 
+                newFigureShape.Fill = brush;
 
-                PropertyInfo prop = type.GetProperty("Fill");        
-                prop.SetValue(newFigureShape, brush);
+                color = (Color)ColorConverter.ConvertFromString(ClrPcker_Stroke.SelectedColorText);
+                brush = new SolidColorBrush(color);
 
-                prop = type.GetProperty("Stroke");
-                prop.SetValue(newFigureShape, brush);
+                newFigureShape.Stroke = brush;
 
                 figureList.ObjectList.Add((Shape)newFigureShape);
                 FigureField.Children.Add((Shape)newFigureShape);
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show(ex.Message);
-            }*/
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -108,7 +100,7 @@ namespace Graphika
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -126,7 +118,7 @@ namespace Graphika
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message);
                 Close();
             }
         }
