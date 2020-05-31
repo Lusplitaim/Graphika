@@ -4,9 +4,9 @@ using System.Windows.Media;
 
 namespace Graphika.Shapes
 {
-    class PolygonFigure: Figure
+    class PolygonFigure : IFigure
     {
-        public override Shape DrawShape(int X1, int Y1, int X2, int Y2, int Addit)
+        public Shape DrawShape(int X1, int Y1, int X2, int Y2, int Addit)
         {
             // Значение параметра Addit по умолчанию.
             int AdditDefaul = 100;

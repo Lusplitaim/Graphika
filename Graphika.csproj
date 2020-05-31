@@ -79,12 +79,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Data\DataIO.cs" />
-    <Compile Include="Shapes\EllipseFig.cs" />
-    <Compile Include="Shapes\Figure.cs" />
     <Compile Include="Shapes\FigureList.cs" />
-    <Compile Include="Shapes\LineFig.cs" />
-    <Compile Include="Shapes\PolygonFig.cs" />
-    <Compile Include="Shapes\RectangleFig.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

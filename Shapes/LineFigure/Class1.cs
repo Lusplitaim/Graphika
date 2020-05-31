@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Windows.Shapes;
 using System.Windows.Controls;
+using System.Windows.Shapes;
 
 namespace Graphika.Shapes
 {
-    class LineFigure: Figure
+    class LineFigure : IFigure
     {
-        public override Shape DrawShape(int X1, int Y1, int X2, int Y2, int Addit)
+        public Shape DrawShape(int X1, int Y1, int X2, int Y2, int Addit)
         {
             Line line = new Line();
             line.StrokeThickness = Addit;

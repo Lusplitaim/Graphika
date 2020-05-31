@@ -3,9 +3,9 @@ using System.Windows.Shapes;
 
 namespace Graphika.Shapes
 {
-    class EllipseFigure: Figure
+    public class EllipseFigure: IFigure
     {
-        public override Shape DrawShape(int X1, int Y1, int X2, int Y2, int Addit)
+        public Shape DrawShape(int X1, int Y1, int X2, int Y2, int Addit)
         {
             Ellipse ellipse = new Ellipse();
             ellipse.Height = Math.Abs(Y2 - Y1);
