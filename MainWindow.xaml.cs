@@ -4,9 +4,11 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Reflection;
+using System.Linq;
+using System.IO;
 using Graphika.Shapes;
 using Graphika.Data;
-
 
 namespace Graphika
 {
@@ -18,14 +20,9 @@ namespace Graphika
         // Список объектов, сохраняемых в файл.
         private FigureList figureList;
 
-        // Список объектов, доступных для рисования.
-        private readonly List<Figure> shapesList = new List<Figure>
-        {
-            new EllipseFigure(),
-            new RectangleFigure(),
-            new LineFigure(),
-            new PolygonFigure()
-        };
+        private readonly string pluginPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Figures");
+
+        private List<IFigure> figureBox = new List<IFigure>();
 
         // Вспомогательный объект сериализации/десериализации.
         private DataIO dataIO;
@@ -36,17 +33,13 @@ namespace Graphika
         public MainWindow()
         {
             InitializeComponent();
-            ClrPcker_Background.SelectedColor = Colors.Black;
-            ClrPcker_Stroke.SelectedColor = Colors.Black;        
-            FigureComboList.ItemsSource = shapesList;
-            FigureComboList.SelectedIndex = 0;
         }
 
         private void CreateShape(object sender, RoutedEventArgs e)
         {
             try
             {
-                var chosenFigureMode = (Figure)FigureComboList.SelectedItem;
+                var chosenFigureMode = (IFigure)FigureComboList.SelectedItem;
 
                 int X1 = Convert.ToInt32(X1Edit.Text);
                 int X2 = Convert.ToInt32(X2Edit.Text);
@@ -97,6 +90,9 @@ namespace Graphika
                         FigureField.Children.Add(obj);
                     }
                 }
+
+                RefreshPlugins();
+                InitializeGUIComponents();
             }
             catch (Exception ex)
             {
@@ -104,7 +100,41 @@ namespace Graphika
             }
         }
 
-        private void Window_Closed(object sender, EventArgs e) 
+        public void InitializeGUIComponents()
+        {
+            ClrPcker_Background.SelectedColor = Colors.Black;
+            ClrPcker_Stroke.SelectedColor = Colors.Black;
+            FigureComboList.ItemsSource = figureBox;
+            FigureComboList.SelectedIndex = 0;
+        }
+
+        private void RefreshPlugins()
+        {
+            figureBox.Clear();
+
+            DirectoryInfo pluginDirectory = new DirectoryInfo(pluginPath);
+            if (!pluginDirectory.Exists)
+                pluginDirectory.Create();
+
+            //Берем из директории все файлы с расширением .dll      
+            var pluginFiles = Directory.GetFiles(pluginPath, "*.dll");
+            foreach (var file in pluginFiles)
+            {
+                // Загружаем сборку.
+                Assembly asm = Assembly.LoadFrom(file);
+                // Ищем типы, имплементирующие наш интерфейс IPlugin, чтобы не захватить лишнего.                
+                var types = asm.GetTypes().Where(t => t.GetInterfaces().Where(i => i.FullName == typeof(IFigure).FullName).Any());
+
+                // Заполняем экземплярами полученных типов коллекцию плагинов.
+                foreach (var type in types)
+                {
+                    var plugin = asm.CreateInstance(type.FullName) as IFigure;
+                    figureBox.Add(plugin);
+                }
+            }
+        }
+
+            private void Window_Closed(object sender, EventArgs e) 
         {
             try
             {
